@@ -1,0 +1,2 @@
+x = 5
+IO.puts "Test-function\n" <> inspect x
