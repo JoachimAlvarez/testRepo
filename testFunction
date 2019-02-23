@@ -5,7 +5,7 @@ quote location: :keep do
   return :start
 
   Enum.each Enum.to_list(1..99999), fn x ->
-    return :gitHubTEST22222
+    return :newTEST
     :timer.sleep 500
   end 
 
