@@ -1,2 +1,15 @@
-x = 50
-IO.puts "Test-function\n" <> inspect x
+quote location: :keep do      
+  # some dependencies
+  import DevOpsCore.SlaveModule
+
+  value = :githubTEST
+
+  return :start
+
+  Enum.each Enum.to_list(1..99999), fn x ->
+    return unquote(value)
+    :timer.sleep 500
+  end 
+
+  return :stop
+end
