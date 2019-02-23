@@ -2,12 +2,12 @@ quote location: :keep do
   # some dependencies
   import DevOpsCore.SlaveModule
 
-  value = :githubTESTe
+  value = :githubTEST
 
   return :start
 
   Enum.each Enum.to_list(1..99999), fn x ->
-    return unquote(value)
+    return value
     :timer.sleep 500
   end 
 
