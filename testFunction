@@ -1,0 +1,13 @@
+quote location: :keep do      
+  # some dependencies
+  import DevOpsCore.SlaveModule
+
+  return :start
+
+  Enum.each Enum.to_list(1..99999), fn x ->
+    return :testGithub
+    :timer.sleep 500
+  end 
+
+  return :stop
+end
