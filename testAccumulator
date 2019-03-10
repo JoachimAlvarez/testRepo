@@ -1,21 +1,9 @@
 quote location: :keep do      
   # some dependencies
   import DevOpsCore.SlaveModule
-
-  x = 0
-
-  Enum.each Enum.to_list(1..999999), fn _x ->
-    return x
-    
-    # update X
-    x = x+1
-    
-    # reset X?
-    if x > 100 do
-        x = 0
-    end
-      
-    
+  
+  Enum.each Enum.to_list(0..999999), fn x ->
+    return rem(x, 101)
     
     :timer.sleep 1000
   end 
