@@ -4,7 +4,7 @@ quote location: :keep do
 
   x = 0
 
-  Enum.each Enum.to_list(1..999999), fn x ->
+  Enum.each Enum.to_list(1..999999), fn _x ->
     return x
     
     # update X
