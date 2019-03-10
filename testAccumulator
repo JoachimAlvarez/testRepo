@@ -6,8 +6,10 @@ quote location: :keep do
 
   Enum.each Enum.to_list(1..999999), fn x ->
     # reset X sometimes
-    if x > 100 do
-      x = 0
+    x = if x > 100 do
+      0
+      else
+      x
     end
     return x
     
