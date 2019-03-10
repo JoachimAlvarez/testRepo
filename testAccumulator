@@ -5,15 +5,14 @@ quote location: :keep do
   x = 0
 
   Enum.each Enum.to_list(1..999999), fn x ->
-    # reset X sometimes
-    x = if x > 100 do
-      0
-      else
-      x
-    end
     return x
     
-    x = x+1
+    # update X
+    x = if x > 100 do
+        0
+      else
+       x+1
+      end
     
     :timer.sleep 1000
   end 
