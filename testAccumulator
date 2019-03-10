@@ -8,11 +8,14 @@ quote location: :keep do
     return x
     
     # update X
-    x = if x > 100 do
-        0
-      else
-       x+1
-      end
+    x = x+1
+    
+    # reset X?
+    if x > 100 do
+        x = 0
+    end
+      
+    
     
     :timer.sleep 1000
   end 
