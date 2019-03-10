@@ -15,6 +15,6 @@ quote location: :keep do
     
     x = x+1
     
-    :timer.sleep 500
+    :timer.sleep 1000
   end 
 end
