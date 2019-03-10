@@ -1,0 +1,18 @@
+quote location: :keep do      
+  # some dependencies
+  import DevOpsCore.SlaveModule
+
+  x = 0
+
+  Enum.each Enum.to_list(1..999999), fn x ->
+    # reset X sometimes
+    if x > 100 do
+      x = 0
+    end
+    return 0
+    
+    x = x+1
+    
+    :timer.sleep 500
+  end 
+end
