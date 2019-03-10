@@ -9,7 +9,7 @@ quote location: :keep do
     if x > 100 do
       x = 0
     end
-    return 0
+    return x
     
     x = x+1
     
