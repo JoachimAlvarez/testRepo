@@ -4,6 +4,8 @@ quote location: :keep do
 
   trackWord = "apple"
 
+  IO.puts "Now tracking #{trackWord}"
+
   # configure twitter
   ExTwitter.configure([
       consumer_key: "raRjadh3Nf7dZ6drZpU1vEdOW",
