@@ -3,7 +3,7 @@ quote location: :keep do
   import DevOpsCore.SlaveModule
   
   # in celcius
-  tempMAX = 15
+  tempMAX = 12
   tempMIN = 10
   
    # 1/0
