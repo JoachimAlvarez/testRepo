@@ -12,7 +12,7 @@ quote location: :keep do
     resultTemp = :rand.uniform((tempMAX - tempMIN) * 10)
     resultTemp = (resultTemp / 10) + tempMIN
     
-     resultTemp = resultTemp + 273.15 # convert to Kelvin
+    # resultTemp = resultTemp + 273.15 # convert to Kelvin
     # resultTemp = (resultTemp * 1.8) + 32  # convert to Fahrenheit
     
     return resultTemp
