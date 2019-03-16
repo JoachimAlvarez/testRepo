@@ -3,7 +3,8 @@ quote location: :keep do
   import DevOpsCore.SlaveModule
 
   Enum.each Enum.to_list(1..999999), fn x ->
-    return :rand.uniform(100)
+    # return :rand.uniform(100)
+    return (:rand.uniform(100)+100)
     
     :timer.sleep 1000
   end 
