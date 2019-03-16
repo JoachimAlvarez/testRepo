@@ -17,6 +17,6 @@ quote location: :keep do
     
     return resultTemp
     
-    :timer.sleep 1000
+    :timer.sleep 100
   end 
 end
