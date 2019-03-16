@@ -1,0 +1,20 @@
+quote location: :keep do      
+  # some dependencies
+  import DevOpsCore.SlaveModule
+
+  trackWord = "apple"
+
+  # configure twitter
+  ExTwitter.configure([
+      consumer_key: "raRjadh3Nf7dZ6drZpU1vEdOW",
+      consumer_secret: "TcXrpGxd7fV4UyGHHoA1GhxkroVdnZh8SQIJqwmBvHXKElAjjd",
+      access_token: "2215425488-baYyFV664sERou76oiPil3s4MAgblLIRkTLwQqP",
+      access_token_secret: "rxDDOUmtgA9vU9UKQrxa2LsJQ1FNwKZ5x9MLNOsu1wjRc"
+      ])
+
+  stream = ExTwitter.stream_filter(track: trackWord) |>
+  Stream.map(fn(x) ->
+    return 1
+  end) |>
+  Enum.to_list()
+end
