@@ -1,0 +1,17 @@
+quote location: :keep do      
+  # some dependencies
+  import DevOpsCore.SlaveModule
+  
+  # in celcius
+  tempMAX = 10
+  tempMIN = 9
+
+  Enum.each Enum.to_list(0..999999), fn x ->
+    resultTemp :rand.uniform((tempMAX - tempMIN) * 10)
+    resultTemp = (resultTemp / 10) + tempMIN
+    
+    return resultTemp
+    
+    :timer.sleep 1000
+  end 
+end
