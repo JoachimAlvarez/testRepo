@@ -6,7 +6,7 @@ quote location: :keep do
   tempMAX = 15
   tempMIN = 10
   
-   1/0
+   # 1/0
 
   Enum.each Enum.to_list(0..999999), fn x ->
     resultTemp = :rand.uniform((tempMAX - tempMIN) * 10)
