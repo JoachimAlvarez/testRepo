@@ -15,7 +15,7 @@ quote location: :keep do
       access_token_secret: "rxDDOUmtgA9vU9UKQrxa2LsJQ1FNwKZ5x9MLNOsu1wjRc"
       ])
 
-  stream = ExTwitter.stream_filter([track: trackWord], 1000) |>
+  stream = ExTwitter.stream_filter([track: trackWord], 5000) |>
   Stream.map(fn(x) ->
     return trackWord
   end) |>
