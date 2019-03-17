@@ -2,7 +2,7 @@ quote location: :keep do
   # some dependencies
   import DevOpsCore.SlaveModule
 
-  trackWord = "it"
+  trackWord = "microsoft"
 
   DevOpsCore.InfluxDBHelper.setup("DevOps_Potato")
   IO.puts "Now tracking #{trackWord}"
@@ -15,14 +15,14 @@ quote location: :keep do
       access_token_secret: "rxDDOUmtgA9vU9UKQrxa2LsJQ1FNwKZ5x9MLNOsu1wjRc"
       ])
 
-  pid = spawn fn ->
+  # pid = spawn fn ->
     stream = ExTwitter.stream_filter([track: trackWord], 10000) |>
     Stream.map(fn(x) ->
       return trackWord
     end) |>
     Enum.to_list()
-  end
+  # end
   
-  :timer.sleep(10000)
-  ExTwitter.stream_control(pid, :stop)
+  # :timer.sleep(10000)
+  # ExTwitter.stream_control(pid, :stop)
 end
