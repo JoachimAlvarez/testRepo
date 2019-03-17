@@ -21,8 +21,8 @@ quote location: :keep do
   # end) |>
   # Enum.to_list()
   
-  pid = spawn fn ->
-    stream = ExTwitter.stream_filter(track: "trackWord")
+  stream = ExTwitter.stream_filter(track: "trackWord")
+  pid = spawn fn ->    
     for tweet <- stream do
       IO.puts "found it"
       return trackWord
@@ -30,5 +30,5 @@ quote location: :keep do
   end
 
   :timer.sleep(5000)
-  ExTwitter.stream_control(pid, :stop)
+  ExTwitter.stream_control(stream, :stop)
 end
