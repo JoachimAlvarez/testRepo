@@ -5,7 +5,7 @@ quote location: :keep do
   trackWord = "microsoft"
 
   DevOpsCore.InfluxDBHelper.setup("DevOps_Potato")
-  IO.puts "Now tracking #{inspect trackWord}"
+  IO.puts "Started Twitter tracking of #{inspect trackWord}"
 
   # configure twitter
   ExTwitter.configure([
