@@ -1,10 +1,11 @@
 quote location: :keep do      
   # some dependencies
-  import DevOpsCore.SlaveModule
-  InfluxDBHelper.setup("DevOps_Potato")
+  import DevOpsCore.SlaveModule  
+  alias DevOpsCore.InfluxDBHelper
 
   trackWord = "the"
 
+  InfluxDBHelper.setup("DevOps_Potato")
   IO.puts "Now tracking #{trackWord}"
 
   # configure twitter
