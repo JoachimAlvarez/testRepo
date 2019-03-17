@@ -17,7 +17,7 @@ quote location: :keep do
 
   stream = ExTwitter.stream_filter(track: trackWord) |>
   Stream.map(fn(x) ->
-     return trackWord
+     # return trackWord
     # DevOpsCore.InfluxDBHelper.execute("INSERT twitter_popularity,host=#{inspect node},topic=twitter2 value=1")
     # IO.puts "Gotten #{inspect trackWord}"
       IO.puts "found it"
