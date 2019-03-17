@@ -2,7 +2,7 @@ quote location: :keep do
   # some dependencies
   import DevOpsCore.SlaveModule
 
-  trackWord = "microsoft"
+  trackWord = "apple"
 
   DevOpsCore.InfluxDBHelper.setup("DevOps_Potato")
   IO.puts "Now tracking #{trackWord}"
@@ -23,6 +23,6 @@ quote location: :keep do
     Enum.to_list()
   end
   
-  :timer.sleep(5000)
+  :timer.sleep(10000)
   ExTwitter.stream_control(pid, :stop)
 end
