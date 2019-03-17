@@ -19,6 +19,7 @@ quote location: :keep do
     stream = ExTwitter.stream_filter(track: "trackWord")
     for tweet <- stream do
       IO.puts "found it"
+      return trackWord
     end
   end
 
