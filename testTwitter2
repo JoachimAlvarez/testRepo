@@ -5,7 +5,7 @@ quote location: :keep do
   trackWord = "microsoft"
 
   DevOpsCore.InfluxDBHelper.setup("DevOps_Potato")
-  IO.puts "Now tracking #{trackWord}"
+  IO.puts "Twitter 2 tracking of #{inspect trackWord}"
 
   # configure twitter
   ExTwitter.configure([
@@ -15,23 +15,14 @@ quote location: :keep do
       access_token_secret: "rxDDOUmtgA9vU9UKQrxa2LsJQ1FNwKZ5x9MLNOsu1wjRc"
       ])
 
-  pid = spawn fn ->
-    stream = ExTwitter.stream_filter(track: "trackWord")
-    for tweet <- stream do
-      IO.puts "found it"
+  # pid = spawn fn ->
+    stream = ExTwitter.stream_filter([track: trackWord], 10000) |>
+    Stream.map(fn(x) ->
       return trackWord
-    end
-  end
-
-  :timer.sleep(5000)
-  ExTwitter.stream_control(pid, :stop)
-
-  # stream = ExTwitter.stream_filter(track: trackWord) |>
-  # Stream.map(fn(x) ->
-     # return trackWord
-    # DevOpsCore.InfluxDBHelper.execute("INSERT twitter_popularity,host=#{inspect node},topic=twitter2 value=1")
-    # IO.puts "Gotten #{inspect trackWord}"
-  #     IO.puts "found it"
-  # end) |>
-  # Enum.to_list()
+    end) |>
+    Enum.to_list()
+  # end
+  
+  # :timer.sleep(10000)
+  # ExTwitter.stream_control(pid, :stop)
 end
