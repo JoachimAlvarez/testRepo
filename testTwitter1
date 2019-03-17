@@ -15,20 +15,9 @@ quote location: :keep do
       access_token_secret: "rxDDOUmtgA9vU9UKQrxa2LsJQ1FNwKZ5x9MLNOsu1wjRc"
       ])
 
-  # stream = ExTwitter.stream_filter(track: trackWord, 1000) |>
-  # Stream.map(fn(x) ->
-  #   return trackWord
-  # end) |>
-  # Enum.to_list()
-  
-  stream = ExTwitter.stream_filter(track: "trackWord")
-  pid = spawn fn ->    
-    for tweet <- stream do
-      IO.puts "found it"
-      return trackWord
-    end
-  end
-
-  :timer.sleep(5000)
-  ExTwitter.stream_control(stream, :stop)
+  stream = ExTwitter.stream_filter(track: trackWord, 1000) |>
+  Stream.map(fn(x) ->
+    return trackWord
+  end) |>
+  Enum.to_list()
 end
