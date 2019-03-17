@@ -2,7 +2,7 @@ quote location: :keep do
   # some dependencies
   import DevOpsCore.SlaveModule
 
-  trackWord = "the"
+  trackWord = "it"
 
   DevOpsCore.InfluxDBHelper.setup("DevOps_Potato")
   IO.puts "Now tracking #{trackWord}"
@@ -20,6 +20,7 @@ quote location: :keep do
      return trackWord
     # DevOpsCore.InfluxDBHelper.execute("INSERT twitter_popularity,host=#{inspect node},topic=twitter2 value=1")
     # IO.puts "Gotten #{inspect trackWord}"
+      IO.puts "found it"
   end) |>
   Enum.to_list()
 end
