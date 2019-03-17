@@ -3,7 +3,7 @@ quote location: :keep do
   import DevOpsCore.SlaveModule  
   alias DevOpsCore.InfluxDBHelper
 
-  trackWord = "the"
+  trackWord = "apple"
 
   DevOpsCore.InfluxDBHelper.setup("DevOps_Potato")
   IO.puts "Now tracking #{trackWord}"
@@ -19,7 +19,7 @@ quote location: :keep do
   stream = ExTwitter.stream_filter(track: trackWord) |>
   Stream.map(fn(x) ->
     # return trackWord
-    # InfluxDBHelper.execute("INSERT twitter_popularity,host=#{inspect node},topic=twitter1 value=1")
+    InfluxDBHelper.execute("INSERT twitter_popularity,host=#{inspect node},topic=twitter1 value=1")
     IO.puts "Gotten #{inspect trackWord}"
   end) |>
   Enum.to_list()
