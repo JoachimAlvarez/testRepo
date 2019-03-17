@@ -15,9 +15,11 @@ quote location: :keep do
       access_token_secret: "rxDDOUmtgA9vU9UKQrxa2LsJQ1FNwKZ5x9MLNOsu1wjRc"
       ])
 
-  stream = ExTwitter.stream_filter(track: "trackWord")
-  for tweet <- stream do
-    IO.puts "found it"
+  pid = fn ->
+    stream = ExTwitter.stream_filter(track: "trackWord")
+    for tweet <- stream do
+      IO.puts "found it"
+    end
   end
 
   # stream = ExTwitter.stream_filter(track: trackWord) |>
