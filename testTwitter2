@@ -2,7 +2,7 @@ quote location: :keep do
   # some dependencies
   import DevOpsCore.SlaveModule
 
-  trackWord = "microsoft"
+  trackWord = "microsofty"
 
   DevOpsCore.InfluxDBHelper.setup("DevOps_Potato")
   IO.puts "Now tracking #{trackWord}"
