@@ -15,7 +15,7 @@ quote location: :keep do
       access_token_secret: "rxDDOUmtgA9vU9UKQrxa2LsJQ1FNwKZ5x9MLNOsu1wjRc"
       ])
 
-  pid = fn ->
+  pid = spawn fn ->
     stream = ExTwitter.stream_filter(track: "trackWord")
     for tweet <- stream do
       IO.puts "found it"
