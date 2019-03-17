@@ -15,12 +15,17 @@ quote location: :keep do
       access_token_secret: "rxDDOUmtgA9vU9UKQrxa2LsJQ1FNwKZ5x9MLNOsu1wjRc"
       ])
 
-  stream = ExTwitter.stream_filter(track: trackWord) |>
-  Stream.map(fn(x) ->
+  stream = ExTwitter.stream_filter(track: "trackWord")
+  for tweet <- stream do
+    IO.puts "found it"
+  end
+
+  # stream = ExTwitter.stream_filter(track: trackWord) |>
+  # Stream.map(fn(x) ->
      # return trackWord
     # DevOpsCore.InfluxDBHelper.execute("INSERT twitter_popularity,host=#{inspect node},topic=twitter2 value=1")
     # IO.puts "Gotten #{inspect trackWord}"
-      IO.puts "found it"
-  end) |>
-  Enum.to_list()
+  #     IO.puts "found it"
+  # end) |>
+  # Enum.to_list()
 end
