@@ -19,7 +19,7 @@ quote location: :keep do
   Stream.map(fn(x) ->
     # return trackWord
     InfluxDBHelper.execute("INSERT twitter_popularity,host=#{inspect node},topic=twitter1 value=1")
-    IO.puts inspect x
+    IO.puts "Gotten #{inspect trackWord}"
   end) |>
   Enum.to_list()
 end
