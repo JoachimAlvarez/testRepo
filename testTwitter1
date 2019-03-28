@@ -14,27 +14,14 @@ quote location: :keep do
       access_token: "2215425488-baYyFV664sERou76oiPil3s4MAgblLIRkTLwQqP",
       access_token_secret: "rxDDOUmtgA9vU9UKQrxa2LsJQ1FNwKZ5x9MLNOsu1wjRc"
       ])
-
-  # check if agent exists already
-  try do
-    IO.puts "1"
-    
-    # if exists, take old PID for data streaming & stop it
-    oldPID = Agent.get(agentID, fn(state) ->
-      state
-    end, 1000)
-
-    IO.puts "1.5"
-    ExTwitter.stream_control(oldPID, :stop)
-    
-    IO.puts "Old stream deleted"
-  rescue
-    e ->
-      IO.puts "2"
       
-      # if first time, just create the agent
-      Agent.start_link(fn -> 0 end, name: agentID)
-      IO.puts "new agent made"
+  oldPID = Agent.get(agentID, fn(state) ->
+    state
+  end)
+
+  if oldPID != nil && oldPID != [] do
+    ExTwitter.stream_control(oldPID, :stop)
+    IO.puts "Old stream deleted"
   end
   
   # make new PID
