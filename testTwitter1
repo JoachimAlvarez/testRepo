@@ -1,7 +1,6 @@
 quote location: :keep do      
   # some dependencies
   import DevOpsCore.SlaveModule
-  alias DevOpsCore.GitHubAgent
   
   agentID = :twitterAPI_1
 
@@ -17,19 +16,19 @@ quote location: :keep do
       access_token_secret: "rxDDOUmtgA9vU9UKQrxa2LsJQ1FNwKZ5x9MLNOsu1wjRc"
       ])
 
-  # check if agent exists already
-  try do
-    # if exists, take old PID for data streaming & stop it
-    oldPID = Agent.get(agentID, fn(state) ->
-      state
-    end)
+  # # check if agent exists already
+  # try do
+  #   # if exists, take old PID for data streaming & stop it
+  #   oldPID = Agent.get(agentID, fn(state) ->
+  #     state
+  #   end)
 
-    ExTwitter.stream_control(oldPID, :stop)
-  rescue
-    e ->
-      # if first time, just create the agent
-      Agent.start_link(fn -> 0 end, name: @agentPrograms)
-  end
+  #   ExTwitter.stream_control(oldPID, :stop)
+  # rescue
+  #   e ->
+  #     # if first time, just create the agent
+  #     Agent.start_link(fn -> 0 end, name: @agentPrograms)
+  # end
   
   # make new PID
   newPID = spawn fn ->
@@ -42,9 +41,9 @@ quote location: :keep do
   end
   
   # store PID in agent
-  Agent.update(@agentOptions, fn(_oldPID) -> 
-    newPID
-  end)
+  # Agent.update(@agentOptions, fn(_oldPID) -> 
+  #   newPID
+  # end)
 
   # :timer.sleep(10000)
   # ExTwitter.stream_control(pid, :stop)
