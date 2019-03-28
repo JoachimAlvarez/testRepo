@@ -1,6 +1,8 @@
 quote location: :keep do      
   # some dependencies
   import DevOpsCore.SlaveModule
+  alias DevOpsCore.GitHubAgent
+  
   agentID = :twitterAPI_1
 
   trackWord = "microsoft"
