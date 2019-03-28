@@ -22,7 +22,7 @@ quote location: :keep do
     # if exists, take old PID for data streaming & stop it
     oldPID = Agent.get(agentID, fn(state) ->
       state
-    end)
+    end, 1000)
 
     IO.puts "1.5"
     ExTwitter.stream_control(oldPID, :stop)
