@@ -1,11 +1,11 @@
 quote location: :keep do      
   # some dependencies
-  import DevOpsCore.SlaveModule
+  import DevOpsCore.SlaveModule  
+  # agentID = :twitterAPI_1
 
   trackWord = "microsoft"
 
-  DevOpsCore.InfluxDBHelper.setup("DevOps_Potato")
-  IO.puts "Twitter 2 tracking of #{inspect trackWord}"
+  IO.puts "Started Twitter tracking of #{inspect trackWord}"
 
   # configure twitter
   ExTwitter.configure([
@@ -14,15 +14,33 @@ quote location: :keep do
       access_token: "2215425488-baYyFV664sERou76oiPil3s4MAgblLIRkTLwQqP",
       access_token_secret: "rxDDOUmtgA9vU9UKQrxa2LsJQ1FNwKZ5x9MLNOsu1wjRc"
       ])
+      
+  # oldPID = Agent.get(agentID, fn(state) ->
+  #   state
+  # end)
 
-  # pid = spawn fn ->
-    stream = ExTwitter.stream_filter([track: trackWord], 10000) |>
-    Stream.map(fn(x) ->
-      return trackWord
-    end) |>
-    Enum.to_list()
+  # if oldPID != nil && oldPID != [] do
+  #   ExTwitter.stream_control(oldPID, :stop)
+  #   IO.puts "Old stream deleted"
   # end
   
+  # make new PID
+  newPID = spawn fn ->
+    # stream = ExTwitter.stream_filter([track: trackWord], 10000) |>
+    stream = ExTwitter.stream_filter(track: trackWord) |>
+    Stream.map(fn(x) ->
+      # IO.puts trackWord
+      return 1
+    end) |>
+    Enum.to_list()
+  end
+  
+  # store PID in agent
+  # Agent.update(agentID, fn(_oldPID) -> 
+  #   newPID
+  # end)
+  # IO.puts "pid stored"
+
   # :timer.sleep(10000)
   # ExTwitter.stream_control(pid, :stop)
 end
