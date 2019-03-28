@@ -3,7 +3,7 @@ quote location: :keep do
   import DevOpsCore.SlaveModule
   
   Enum.each Enum.to_list(0..999999), fn x ->
-    return rem(x, 101)
+    return rem(x*5, 101)
     
     # return (:rand.uniform(50)+130)
     
