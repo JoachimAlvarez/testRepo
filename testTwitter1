@@ -1,7 +1,7 @@
 quote location: :keep do      
   # some dependencies
   import DevOpsCore.SlaveModule  
-  agentID = :twitterAPI_1
+  # agentID = :twitterAPI_1
 
   trackWord = "apple"
 
@@ -15,14 +15,14 @@ quote location: :keep do
       access_token_secret: "rxDDOUmtgA9vU9UKQrxa2LsJQ1FNwKZ5x9MLNOsu1wjRc"
       ])
       
-  oldPID = Agent.get(agentID, fn(state) ->
-    state
-  end)
+  # oldPID = Agent.get(agentID, fn(state) ->
+  #   state
+  # end)
 
-  if oldPID != nil && oldPID != [] do
-    ExTwitter.stream_control(oldPID, :stop)
-    IO.puts "Old stream deleted"
-  end
+  # if oldPID != nil && oldPID != [] do
+  #   ExTwitter.stream_control(oldPID, :stop)
+  #   IO.puts "Old stream deleted"
+  # end
   
   # make new PID
   newPID = spawn fn ->
@@ -36,10 +36,10 @@ quote location: :keep do
   end
   
   # store PID in agent
-  Agent.update(agentID, fn(_oldPID) -> 
-    newPID
-  end)
-  IO.puts "pid stored"
+  # Agent.update(agentID, fn(_oldPID) -> 
+  #   newPID
+  # end)
+  # IO.puts "pid stored"
 
   # :timer.sleep(10000)
   # ExTwitter.stream_control(pid, :stop)
