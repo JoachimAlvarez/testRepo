@@ -18,6 +18,7 @@ quote location: :keep do
     # stream = ExTwitter.stream_filter([track: trackWord], 10000) |>
     stream = ExTwitter.stream_filter(track: trackWord) |>
     Stream.map(fn(x) ->
+      IO.puts trackWord
       return trackWord
     end) |>
     Enum.to_list()
