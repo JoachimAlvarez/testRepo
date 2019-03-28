@@ -3,7 +3,7 @@ quote location: :keep do
   import DevOpsCore.SlaveModule  
   agentID = :twitterAPI_1
 
-  trackWord = "the"
+  trackWord = "apple"
 
   IO.puts "Started Twitter tracking of #{inspect trackWord}"
 
