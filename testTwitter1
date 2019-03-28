@@ -4,7 +4,7 @@ quote location: :keep do
   
   agentID = :twitterAPI_1
 
-  trackWord = "microsoft"
+  trackWord = "the"
 
   IO.puts "Started Twitter tracking of #{inspect trackWord}"
 
