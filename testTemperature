@@ -9,11 +9,15 @@ quote location: :keep do
    # 1/0
 
   Enum.each Enum.to_list(0..999999), fn x ->
+    # simulate a temperature in °C
     resultTemp = :rand.uniform((tempMAX - tempMIN) * 10)
     resultTemp = (resultTemp / 10) + tempMIN
     
-    # resultTemp = resultTemp + 273.15 # convert to Kelvin
-    # resultTemp = (resultTemp * 1.8) + 32  # convert to Fahrenheit
+    # convert °C to Kelvin
+    # resultTemp = resultTemp + 273.15 
+    
+    # convert °C to Fahrenheit
+    # resultTemp = (resultTemp * 1.8) + 32  
     
     return resultTemp
     
