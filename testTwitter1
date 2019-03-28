@@ -17,16 +17,21 @@ quote location: :keep do
 
   # check if agent exists already
   try do
+    IO.puts "1"
+    
     # if exists, take old PID for data streaming & stop it
     oldPID = Agent.get(agentID, fn(state) ->
       state
     end)
 
+    IO.puts "1.5"
     ExTwitter.stream_control(oldPID, :stop)
     
     IO.puts "Old stream deleted"
   rescue
     e ->
+      IO.puts "2"
+      
       # if first time, just create the agent
       Agent.start_link(fn -> 0 end, name: agentID)
       IO.puts "new agent made"
