@@ -1,10 +1,16 @@
 quote location: :keep do      
   # some dependencies
   import DevOpsCore.SlaveModule
+    
+  # get the stream input & output for this program
+  myPD = var!(pd)
+  myOutput = myPD.metaData.inputStream
 
   IO.puts "Code is started!"
 
-  return :start
+  return myOutput, :start
+
+  5/0
 
   #subSpawn fn ->
    #   Enum.each Enum.to_list(1..999999), fn x ->
@@ -15,10 +21,10 @@ quote location: :keep do
    # end
   
   Enum.each Enum.to_list(1..999999), fn x ->
-    return :TEST
+    return myOutput, :TEST
     
     :timer.sleep 500
   end 
 
-  return :stop
+  return myOutput, :stop
 end
