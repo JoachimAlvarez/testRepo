@@ -2,9 +2,13 @@ quote location: :keep do
   # some dependencies
   import DevOpsCore.SlaveModule
 
+  # get the stream input & output for this program
+  myPD = var!(pd)
+  myOutput = myPD.metaData.inputStream
+  
   Enum.each Enum.to_list(1..999999), fn x ->
-    return :rand.uniform(100)
-    # return (:rand.uniform(200)+100)
+    return myOutput, :rand.uniform(100)
+    # return myOutput, (:rand.uniform(200)+100)
     
     :timer.sleep 1000
   end 
