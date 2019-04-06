@@ -4,7 +4,7 @@ quote location: :keep do
 
   # get the stream input & output for this program
   myPD = var!(pd)
-  myOutput = myPD.metaData.inputStream
+  myOutput = myPD.metaData.outputStream
   
   Enum.each Enum.to_list(1..999999), fn x ->
     return myOutput, :rand.uniform(100)
