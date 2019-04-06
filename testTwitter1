@@ -2,6 +2,10 @@ quote location: :keep do
   # some dependencies
   import DevOpsCore.SlaveModule  
   # agentID = :twitterAPI_1
+    
+  # get the stream input & output for this program
+  myPD = var!(pd)
+  myOutput = myPD.metaData.inputStream
 
   trackWord = "apple"
 
@@ -30,7 +34,7 @@ quote location: :keep do
     stream = ExTwitter.stream_filter(track: trackWord) |>
     Stream.map(fn(x) ->
       # IO.puts trackWord
-      return 1
+      return myOutput, 1
     end) |>
     Enum.to_list()
   end
