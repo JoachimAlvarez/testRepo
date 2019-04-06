@@ -10,7 +10,7 @@ quote location: :keep do
 
   return myOutput, :start
 
-  5/0
+  # 5/0
 
   #subSpawn fn ->
    #   Enum.each Enum.to_list(1..999999), fn x ->
