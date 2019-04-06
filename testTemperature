@@ -2,6 +2,10 @@ quote location: :keep do
   # some dependencies
   import DevOpsCore.SlaveModule
   
+  # get the stream input & output for this program
+  myPD = var!(pd)
+  myOutput = myPD.metaData.inputStream
+  
   # in celcius
   tempMAX = 20
   tempMIN = 15
@@ -19,7 +23,7 @@ quote location: :keep do
     # convert °C to Fahrenheit
     # resultTemp = (resultTemp * 1.8) + 32  
     
-    return resultTemp
+    return myOutput, resultTemp
     
     :timer.sleep 1000
   end 
