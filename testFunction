@@ -4,7 +4,7 @@ quote location: :keep do
     
   # get the stream input & output for this program
   myPD = var!(pd)
-  myOutput = myPD.metaData.inputStream
+  myOutput = myPD.metaData.outputStream
 
   IO.puts "Code is started!"
 
