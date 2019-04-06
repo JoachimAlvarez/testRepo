@@ -6,13 +6,13 @@ quote location: :keep do
 
   return :start
 
-  subSpawn fn ->
-      Enum.each Enum.to_list(1..999999), fn x ->
-        IO.puts "subspawn active! - " <> inspect x
+  #subSpawn fn ->
+   #   Enum.each Enum.to_list(1..999999), fn x ->
+   #     IO.puts "subspawn active! - " <> inspect x
 
-        :timer.sleep 500
-      end 
-    end
+   #     :timer.sleep 500
+   #   end 
+   # end
   
   Enum.each Enum.to_list(1..999999), fn x ->
     return :TEST
