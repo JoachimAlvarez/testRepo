@@ -7,7 +7,7 @@ quote location: :keep do
   myPD = var!(pd)
   myOutput = myPD.metaData.outputStream
 
-  trackWord = "microsoft"
+  trackWord = "it"
 
   IO.puts "Started Twitter tracking of #{inspect trackWord}"
 
