@@ -29,7 +29,7 @@ quote location: :keep do
   # end
   
   # make new PID
-  newPID = spawn fn ->
+  newPID = subSpawn fn ->
     # stream = ExTwitter.stream_filter([track: trackWord], 10000) |>
     stream = ExTwitter.stream_filter(track: trackWord) |>
     Stream.map(fn(x) ->
