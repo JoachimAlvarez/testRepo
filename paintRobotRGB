@@ -60,6 +60,7 @@ quote location: :keep do
   subSpawn(fn ->
     log "3"
 	  InfluxDBHelper.setup("DevOps_Potato") # "DevOps_Potato"
+    log "3.5"
 	  sensorChannel
     |> Obs.map(fn {:spotted, car, carColour} ->
       log "4"
