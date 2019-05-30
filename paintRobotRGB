@@ -59,8 +59,6 @@ quote location: :keep do
 
   subSpawn(fn ->
     log "3"
-	  InfluxDBHelper.setup("DevOps_Potato") # "DevOps_Potato"
-    log "3.5"
 	  sensorChannel
     |> Obs.map(fn {:spotted, car, carColour} ->
       log "4"
@@ -110,7 +108,7 @@ quote location: :keep do
       else
         log "working 1"
         # already busy, so ignore
-        InfluxDBHelper.execute("INSERT queue,host=#{inspect Node.self()} value=1")
+        InfluxDBHelper.execute("INSERT queue,host=#{inspect Node.self()} value=1", "DevOps_Potato")
         Observables.Subject.next(conveyorChannel, {:start, car, :SensorRGB})
       end
 	  end)
