@@ -1,109 +1,108 @@
 quote location: :keep do
-        import DevOpsCore.SlaveModule
-        myPD = var!(pd)
-        conveyorChannel = myPD.metaData.conveyorChannel
-        sensorChannel = myPD.metaData.sensorChannel
-        tempChannel = myPD.metaData.tempChannel
+	import DevOpsCore.SlaveModule
+	myPD = var!(pd)
+	conveyorChannel = myPD.metaData.conveyorChannel
+	sensorChannel = myPD.metaData.sensorChannel
+	tempChannel = myPD.metaData.tempChannel
 
-        # 1 = 100% (normal speed), 2 = 200% speed
-        clockrate = 2
+	# 1 = 100% (normal speed), 2 = 200% speed
+	clockrate = 2
 
-        # function to get the DETS id
-        getDetsID = fn -> 
-          [uglyName | _b] = String.split((inspect Node.self()), "@")
-          {_oof, name} = String.split_at uglyName, 2
+	# function to get the DETS id
+	getDetsID = fn -> 
+	  [uglyName | _b] = String.split((inspect Node.self()), "@")
+	  {_oof, name} = String.split_at uglyName, 2
 
-          String.to_atom("paint_robot" <> "_" <> name)
-        end
+	  String.to_atom("paint_robot" <> "_" <> name)
+	end
 
-        # function to simulate increase in temperature 
-        increaseTemp = fn time -> 
-          subSpawn fn -> 
-            timeToIncrease = Kernel.trunc(300 / clockrate) # ms
-            Enum.each(0..(Kernel.trunc(time / timeToIncrease)), fn(_x) ->
-              Observables.Subject.next(tempChannel, :increase)
-              :timer.sleep timeToIncrease
-            end)
-          end          
-        end
+	# function to simulate increase in temperature 
+	increaseTemp = fn time -> 
+	  subSpawn fn -> 
+		timeToIncrease = Kernel.trunc(300 / clockrate) # ms
+		Enum.each(0..(Kernel.trunc(time / timeToIncrease)), fn(_x) ->
+		  Observables.Subject.next(tempChannel, :increase)
+		  :timer.sleep timeToIncrease
+		end)
+	  end          
+	end
 
-        # infinite loop needed for cooling
-        infLoop = fn recurLoop, func -> 
-          func.()
-          recurLoop.(recurLoop, func)
-        end
+	# infinite loop needed for cooling
+	infLoop = fn recurLoop, func -> 
+	  func.()
+	  recurLoop.(recurLoop, func)
+	end
 
-        # simulate cooling of machine
-        subSpawn fn -> 
-          infLoop.(infLoop, fn -> 
-            :timer.sleep 500            
-            Observables.Subject.next(tempChannel, :decrease)
-          end)
-        end
-        
-        # create initial slot if not there yet
-        {:ok, _} = :dets.open_file(getDetsID.(), [type: :set])
-        currItem = :dets.lookup getDetsID.(), :working        
-        if currItem != [] do
-          [{_key, currWorking} | _tail] = currItem
-          if currWorking == 1 do
-            # recuperate a car
-            Observables.Subject.next(conveyorChannel, {:start, %{type: :car}, :CC1})            
-          end
-        end
-        :dets.insert getDetsID.(), {:working, 0}
-        :dets.close getDetsID.()
+	# simulate cooling of machine
+	subSpawn fn -> 
+	  infLoop.(infLoop, fn -> 
+		:timer.sleep 500            
+		Observables.Subject.next(tempChannel, :decrease)
+	  end)
+	end
+	
+	# create initial slot if not there yet
+	{:ok, _} = :dets.open_file(getDetsID.(), [type: :set])
+	currItem = :dets.lookup getDetsID.(), :working        
+	if currItem != [] do
+	  [{_key, currWorking} | _tail] = currItem
+	  if currWorking == 1 do
+		# recuperate a car
+		Observables.Subject.next(conveyorChannel, {:start, %{type: :car}, :CC1})            
+	  end
+	end
+	:dets.insert getDetsID.(), {:working, 0}
+	:dets.close getDetsID.()
 
-        subSpawn(fn ->
-          InfluxDBHelper.setup("DevOps_Potato") # "DevOps_Potato"
-          sensorChannel
-          |> Obs.map(fn {:spotted, car, carColour} ->
-            # check if not already busy painting
-            {:ok, _} = :dets.open_file(getDetsID.(), [type: :set])
-            [{_key, working} | _tail] = :dets.lookup getDetsID.(), :working
-            :dets.close getDetsID.()
+	subSpawn(fn ->
+	  InfluxDBHelper.setup("DevOps_Potato") # "DevOps_Potato"
+	  sensorChannel
+	  |> Obs.map(fn {:spotted, car, carColour} ->
+		# check if not already busy painting
+		{:ok, _} = :dets.open_file(getDetsID.(), [type: :set])
+		[{_key, working} | _tail] = :dets.lookup getDetsID.(), :working
+		:dets.close getDetsID.()
 
-            if working == 0 do
-              # take in the car to start working on it
-              {:ok, _} = :dets.open_file(getDetsID.(), [type: :set])
-              :dets.insert getDetsID.(), {:working, 1}
-              :dets.sync getDetsID.()
-              :dets.close getDetsID.()
+		if working == 0 do
+		  # take in the car to start working on it
+		  {:ok, _} = :dets.open_file(getDetsID.(), [type: :set])
+		  :dets.insert getDetsID.(), {:working, 1}
+		  :dets.sync getDetsID.()
+		  :dets.close getDetsID.()
 
-              subSpawn(fn -> 
-                # car is coloured, give it a finishing touch and a tag
-                newCar1 = Map.put car, :tag, :CompanyTag
-                newCar2 =
-                  case carColour do
-                    :red ->
-                      increaseTemp.(Kernel.trunc(3000/clockrate))
-                      :timer.sleep Kernel.trunc(3000/clockrate)
-                      Map.put newCar1, :finishingTouch, :blueCoolBirdDesign
-                    :green ->
-                      increaseTemp.(Kernel.trunc(5000/clockrate))
-                      :timer.sleep Kernel.trunc(5000/clockrate)
-                      Map.put newCar1, :finishingTouch, :GreenSkullDesign
-                    :blue -> 
-                      increaseTemp.(Kernel.trunc(4000/clockrate))
-                      :timer.sleep Kernel.trunc(4000/clockrate)
-                      Map.put newCar1, :finishingTouch, :RedFireDesign
-                    x -> nil
-                  end
-                
-                # add new car to the conveyor belt
-                {:ok, _} = :dets.open_file(getDetsID.(), [type: :set])
-                :dets.insert getDetsID.(), {:working, 0}
-                :dets.sync getDetsID.()
-                :dets.close getDetsID.()
-                                
-                Observables.Subject.next(conveyorChannel, {:start, newCar2, :SensorRGB})
-                
-              end)
-            else
-              # already busy, so ignore
-              InfluxDBHelper.execute("INSERT queue,host=#{inspect Node.self()} value=1")
-              Observables.Subject.next(conveyorChannel, {:start, car, :SensorRGB})
-            end
-          end)
-        end)
-      end
+		  subSpawn(fn -> 
+			# car is coloured, give it a finishing touch and a tag
+			newCar1 = Map.put car, :tag, :CompanyTag
+			newCar2 =
+			  case carColour do
+				:red ->
+				  increaseTemp.(Kernel.trunc(3000/clockrate))
+				  :timer.sleep Kernel.trunc(3000/clockrate)
+				  Map.put newCar1, :finishingTouch, :blueCoolBirdDesign
+				:green ->
+				  increaseTemp.(Kernel.trunc(5000/clockrate))
+				  :timer.sleep Kernel.trunc(5000/clockrate)
+				  Map.put newCar1, :finishingTouch, :GreenSkullDesign
+				:blue -> 
+				  increaseTemp.(Kernel.trunc(4000/clockrate))
+				  :timer.sleep Kernel.trunc(4000/clockrate)
+				  Map.put newCar1, :finishingTouch, :RedFireDesign
+			  end
+			
+			# add new car to the conveyor belt
+			{:ok, _} = :dets.open_file(getDetsID.(), [type: :set])
+			:dets.insert getDetsID.(), {:working, 0}
+			:dets.sync getDetsID.()
+			:dets.close getDetsID.()
+							
+			Observables.Subject.next(conveyorChannel, {:start, newCar2, :SensorRGB})
+			
+		  end)
+		else
+		  # already busy, so ignore
+		  InfluxDBHelper.execute("INSERT queue,host=#{inspect Node.self()} value=1")
+		  Observables.Subject.next(conveyorChannel, {:start, car, :SensorRGB})
+		end
+	  end)
+	end)
+end
