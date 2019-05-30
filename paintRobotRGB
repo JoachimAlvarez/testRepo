@@ -6,7 +6,7 @@ quote location: :keep do
 	tempChannel = myPD.metaData.tempChannel
 
 	# 1 = 100% (normal speed), 2 = 200% speed
-	clockrate = 1
+	clockrate = 1.1
 
 	# function to get the DETS id
 	getDetsID = fn -> 
