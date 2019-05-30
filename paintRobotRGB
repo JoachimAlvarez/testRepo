@@ -6,7 +6,7 @@ quote location: :keep do
 	tempChannel = myPD.metaData.tempChannel
 
 	# 1 = 100% (normal speed), 2 = 200% speed
-	clockrate = 2
+	clockrate = 1
 
 	# function to get the DETS id
 	getDetsID = fn -> 
@@ -39,7 +39,9 @@ quote location: :keep do
 		:timer.sleep 500            
 		Observables.Subject.next(tempChannel, :decrease)
 	  end)
-	end
+  end
+  
+  log "1"
 	
 	# create initial slot if not there yet
 	{:ok, _} = :dets.open_file(getDetsID.(), [type: :set])
@@ -52,57 +54,64 @@ quote location: :keep do
 	  end
 	end
 	:dets.insert getDetsID.(), {:working, 0}
-	:dets.close getDetsID.()
+  :dets.close getDetsID.()
+  log "2"
 
-	subSpawn(fn ->
+  subSpawn(fn ->
+    log "3"
 	  InfluxDBHelper.setup("DevOps_Potato") # "DevOps_Potato"
 	  sensorChannel
-	  |> Obs.map(fn {:spotted, car, carColour} ->
-		# check if not already busy painting
-		{:ok, _} = :dets.open_file(getDetsID.(), [type: :set])
-		[{_key, working} | _tail] = :dets.lookup getDetsID.(), :working
-		:dets.close getDetsID.()
+    |> Obs.map(fn {:spotted, car, carColour} ->
+      log "4"
+      # check if not already busy painting
+      {:ok, _} = :dets.open_file(getDetsID.(), [type: :set])
+      [{_key, working} | _tail] = :dets.lookup getDetsID.(), :working
+      :dets.close getDetsID.()
 
-		if working == 0 do
-		  # take in the car to start working on it
-		  {:ok, _} = :dets.open_file(getDetsID.(), [type: :set])
-		  :dets.insert getDetsID.(), {:working, 1}
-		  :dets.sync getDetsID.()
-		  :dets.close getDetsID.()
+      if working == 0 do
+        log "working 0"
+        # take in the car to start working on it
+        {:ok, _} = :dets.open_file(getDetsID.(), [type: :set])
+        :dets.insert getDetsID.(), {:working, 1}
+        :dets.sync getDetsID.()
+        :dets.close getDetsID.()
 
-		  subSpawn(fn -> 
-			# car is coloured, give it a finishing touch and a tag
-			newCar1 = Map.put car, :tag, :CompanyTag
-			newCar2 =
-			  case carColour do
-				:red ->
-				  increaseTemp.(Kernel.trunc(3000/clockrate))
-				  :timer.sleep Kernel.trunc(3000/clockrate)
-				  Map.put newCar1, :finishingTouch, :blueCoolBirdDesign
-				:green ->
-				  increaseTemp.(Kernel.trunc(5000/clockrate))
-				  :timer.sleep Kernel.trunc(5000/clockrate)
-				  Map.put newCar1, :finishingTouch, :GreenSkullDesign
-				:blue -> 
-				  increaseTemp.(Kernel.trunc(4000/clockrate))
-				  :timer.sleep Kernel.trunc(4000/clockrate)
-				  Map.put newCar1, :finishingTouch, :RedFireDesign
-			  end
-			
-			# add new car to the conveyor belt
-			{:ok, _} = :dets.open_file(getDetsID.(), [type: :set])
-			:dets.insert getDetsID.(), {:working, 0}
-			:dets.sync getDetsID.()
-			:dets.close getDetsID.()
-							
-			Observables.Subject.next(conveyorChannel, {:start, newCar2, :SensorRGB})
-			
-		  end)
-		else
-		  # already busy, so ignore
-		  InfluxDBHelper.execute("INSERT queue,host=#{inspect Node.self()} value=1")
-		  Observables.Subject.next(conveyorChannel, {:start, car, :SensorRGB})
-		end
+        subSpawn(fn -> 
+          log "5"
+          # car is coloured, give it a finishing touch and a tag
+          newCar1 = Map.put car, :tag, :CompanyTag
+          newCar2 =
+            case carColour do
+            :red ->
+              increaseTemp.(Kernel.trunc(3000/clockrate))
+              :timer.sleep Kernel.trunc(3000/clockrate)
+              Map.put newCar1, :finishingTouch, :blueCoolBirdDesign
+            :green ->
+              increaseTemp.(Kernel.trunc(5000/clockrate))
+              :timer.sleep Kernel.trunc(5000/clockrate)
+              Map.put newCar1, :finishingTouch, :GreenSkullDesign
+            :blue -> 
+              increaseTemp.(Kernel.trunc(4000/clockrate))
+              :timer.sleep Kernel.trunc(4000/clockrate)
+              Map.put newCar1, :finishingTouch, :RedFireDesign
+            end
+            log "6"
+          
+          # add new car to the conveyor belt
+          {:ok, _} = :dets.open_file(getDetsID.(), [type: :set])
+          :dets.insert getDetsID.(), {:working, 0}
+          :dets.sync getDetsID.()
+          :dets.close getDetsID.()
+                  
+          Observables.Subject.next(conveyorChannel, {:start, newCar2, :SensorRGB})
+        
+        end)
+      else
+        log "working 1"
+        # already busy, so ignore
+        InfluxDBHelper.execute("INSERT queue,host=#{inspect Node.self()} value=1")
+        Observables.Subject.next(conveyorChannel, {:start, car, :SensorRGB})
+      end
 	  end)
 	end)
 end
